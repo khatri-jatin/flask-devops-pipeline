@@ -35,4 +35,18 @@ jobs:
         source venv/bin/activate
         pip install -r requirements.txt
         python -c "import flask; print('Flask imported successfully')"
+   
+    - name: Install kubectl (manually)
+      run: |
+        curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        sudo mv kubectl /usr/local/bin/
+
+    - name: Deploy to Kubernetes
+      env:
+        KUBECONFIG_DATA: ${{ secrets.KUBECONFIG }}
+      run: |
+        echo "$KUBECONFIG_DATA" > kubeconfig.yaml
+        export KUBECONFIG=kubeconfig.yaml
+        kubectl apply -f k8s-deployment.yaml
 
