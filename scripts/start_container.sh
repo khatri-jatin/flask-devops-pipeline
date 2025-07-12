@@ -5,4 +5,5 @@ set -e
 docker pull jatin340/sample-flask-app:latest
 
 # Run the Docker image as a container
-docker run -d -p 5000:5000 jatin340/sample-flask-app:latest
+docker rm -f flask-app || true
+docker run -d --name flask-app -p 5000:5000 jatin340/sample-flask-app:latest
